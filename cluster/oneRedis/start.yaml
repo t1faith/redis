@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: startcluster
+  namespace: magic
+spec:
+  containers:
+  - name: startcluster
+    image: registry.rubikstack.com/lichen/redis-start:1.0
+    imagePullPolicy: Always
+    env:
+    - name: CLUSTER_IP1
+      value: 172.16.74.5
+    - name: CLUSTER_IP2
+      value: 172.16.65.9
+    - name: CLUSTER_IP3
+      value: 172.16.44.2
+    - name: CLUSTER_IP4
+      value: 172.16.74.6
+    - name: CLUSTER_IP5
+      value: 172.16.65.16
+    - name: CLUSTER_IP6
+      value: 172.16.44.6
+  volumes:
+  - name: startvolume
+    emptyDir: {}

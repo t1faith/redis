@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis6
+  labels:
+    app: redis6
+  namespace: magic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis6
+  template:
+    metadata:
+      labels:
+        app: redis6
+    spec:
+      containers:
+      - name: redis6
+        image: registry.rubikstack.com/lichen/redis-cluster:one-1.0
+        imagePullPolicy: Always
+        ports:
+        - name: redis6
+          containerPort: 6379
+          protocol: TCP
+      volumes:
+      - name: redis6volume
+        emptyDir: {}
+#      nodeSelector:
+#        node: "11"

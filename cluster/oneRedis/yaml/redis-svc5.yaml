@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis5
+  namespace: magic
+  labels:
+    name: redis5
+spec:
+  selector:
+    name: redis5
+  ports:
+  - name: redis5
+    port: 6379
+    targetPort: 6379
+    protocol: TCP

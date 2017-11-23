@@ -1,0 +1,80 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rediscluster
+  labels:
+    app: rediscluster
+  namespace: magic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rediscluster
+  template:
+    metadata:
+      labels:
+        app: rediscluster
+    spec:
+      hostname: rediscluster
+      containers:
+      - name: rediscluster
+        image: registry.rubikstack.com/lichen/redis-cluster:all-1.0
+        imagePullPolicy: Always
+        ports:
+        - name: c1 
+          containerPort: 7001
+          protocol: TCP
+        - name: c2
+          containerPort: 7002
+          protocol: TCP
+        - name: c3 
+          containerPort: 7003
+          protocol: TCP
+        - name: c4 
+          containerPort: 7004
+          protocol: TCP
+        - name: c5 
+          containerPort: 7005
+          protocol: TCP
+        - name: c6 
+          containerPort: 7006
+          protocol: TCP
+      volumes:
+      - name: clustervolume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rediscluster
+  namespace: magic
+  labels:
+    name: rediscluster
+spec:
+  selector:
+    name: rediscluster
+  ports:
+  - name: c1
+    port: 7001
+    targetPort: 7001
+    protocol: TCP
+  - name: c2
+    port: 7002
+    targetPort: 7002
+    protocol: TCP
+  - name: c3
+    port: 7003
+    targetPort: 7003
+    protocol: TCP
+  - name: c4
+    port: 7004
+    targetPort: 7004
+    protocol: TCP
+  - name: c5
+    port: 7005
+    targetPort: 7005
+    protocol: TCP
+  - name: c6
+    port: 7006
+    targetPort: 7006
+    protocol: TCP
