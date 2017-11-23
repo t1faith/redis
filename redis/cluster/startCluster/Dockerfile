@@ -15,20 +15,10 @@ RUN set -ex; \
 	make -C /usr/src/redis install; \
 	gem install redis
 
-RUN	mkdir /data; \
-	mkdir -p /data/7001; \
-	mkdir -p /data/7002; \
-	mkdir -p /data/7003; \
-	mkdir -p /data/7004; \
-	mkdir -p /data/7005; \
-	mkdir -p /data/7006
+#修改容器时间，注意双空格
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
-COPY 7001.conf /data/7001/redis.conf
-COPY 7002.conf /data/7002/redis.conf
-COPY 7003.conf /data/7003/redis.conf
-COPY 7004.conf /data/7004/redis.conf
-COPY 7005.conf /data/7005/redis.conf
-COPY 7006.conf /data/7006/redis.conf
+#ENV CLUSTER_IP 172.16.65.14
 
 VOLUME /data
 
@@ -36,11 +26,4 @@ WORKDIR /data
 
 COPY entrypoint.sh /usr/local/bin
 ENTRYPOINT ["entrypoint.sh"]
-
-EXPOSE 7001
-EXPOSE 7002
-EXPOSE 7003
-EXPOSE 7004
-EXPOSE 7005
-EXPOSE 7006
 #CMD ["redis-server" , "/data/redis.conf"]

@@ -1,2 +1,1 @@
-# redis
-docker-redis
+#REDIS CLUSTER

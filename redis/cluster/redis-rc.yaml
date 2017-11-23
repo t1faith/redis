@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis1
+  namespace: magic
+spec:
+  replicas: 1
+  selector:
+    name: redis1
+  template:
+    metadata:
+      labels:
+        name: redis1
+    spec:
+      hostname: redis1
+      containers:
+      - name: redis1
+        image: registry.rubikstack.com/lichen/redis-cluster:1.0
+        imagePullPolicy: Always
+        ports:
+        - name: redis1
+          containerPort: 6379
+          protocol: TCP
+      volumes:
+      - name: clustervolume
+        emptyDir: {}
