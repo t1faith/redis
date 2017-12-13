@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zk01
+  namespace: magic
+spec:
+  selector:
+    app: zk01
+  ports:
+  - protocol: TCP
+    name: server
+    port: 2181
+    targetPort: 2181
+  - protocol: TCP
+    name: trans
+    port: 2222
+    targetPort: 2222
+  - protocol: TCP
+    name: elect
+    port: 3333
+    targetPort: 3333

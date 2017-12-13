@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: mongodb
+  labels:
+    name: mongodb
+  namespace: test
+spec:
+  replicas: 1
+  selector:
+    name: mongodb
+  template:
+    metadata:
+      labels:
+        name: mongodb
+    spec:
+      hostname: mongodb
+      containers:
+      - name: mongodb
+        image: registry.rubikstack.com/lichen/mongodb:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongodb-data
+          mountPath: "/data"
+      volumes:
+      - name: mongodb-data
+        persistentVolumeClaim:
+          claimName: mongodbpvc

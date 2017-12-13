@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: codis-manage
+  labels:
+    app: codis-manage
+  namespace: magic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: codis-manage
+  template:
+    metadata:
+      labels:
+        app: codis-manage
+    spec:
+      hostname: codis-manage
+      containers:
+      - name: codis-manage
+        image: registry.cn-hangzhou.aliyuncs.com/1faith/codis:3.2-manage
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: managevolume
+          mountPath: /data/codis-manage
+        ports:
+        - containerPort: 18080
+          name: dashboard
+          protocol: TCP
+        - containerPort: 11080
+          name: admin
+          protocol: TCP
+        - containerPort: 19000
+          name: proxy
+          protocol: TCP
+        - containerPort: 8080
+          name: fe
+          protocol: TCP
+        env:
+        - name: ZK_HOST1
+          value: zk01
+        - name: ZK_HOST2
+          value: zk02
+        - name: ZK_HOST3
+          value: zk03
+        - name: CODIS_CLUSTER_NAME
+          value: codis-test
+        - name: CODIS_ADMIN_NAME
+          value: codis-manage
+        - name: CODIS_PROXY_NAME
+          value: codis-manage
+      volumes:
+      - name: managevolume
+        emptyDir: {}

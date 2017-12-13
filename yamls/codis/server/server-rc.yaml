@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis3
+  labels:
+    app: redis3
+  namespace: magic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis3
+  template:
+    metadata:
+      labels:
+        app: redis3
+    spec:
+      hostname: redis3
+      containers:
+      - name: redis3
+        image: registry.cn-hangzhou.aliyuncs.com/1faith/codis:3.2-server
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: servervolume
+          mountPath: /data
+        env:
+        - name: DATA_PERSISTENT
+          value: "no"
+        ports:
+#        - containerPort: 26379
+#          name: sentinel
+#          protocol: TCP
+        - containerPort: 7000
+          name: server1
+          protocol: TCP
+        - containerPort: 7001
+          name: server2
+          protocol: TCP
+      volumes:
+      - name: servervolume
+        emptyDir: {}

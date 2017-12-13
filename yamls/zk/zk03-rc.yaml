@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zk03
+  labels:
+    app: zk03
+  namespace: magic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zk03
+  template:
+    metadata:
+      labels:
+        app: zk03
+    spec:
+      hostname: zk03
+      containers:
+      - name: zk03
+        image: registry.cn-hangzhou.aliyuncs.com/1faith/zookeeper:3.4.11
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: zkvolume
+          mountPath: /data/zookeeper
+        ports:
+        - containerPort: 2181
+          name: server
+          protocol: TCP
+        - containerPort: 2222
+          name: trans
+          protocol: TCP
+        - containerPort: 3333
+          name: elect
+          protocol: TCP
+        env:
+        - name: SERVER_ID
+          value: "3"
+        - name: HOSTNAME1
+          value: zk01
+        - name: HOSTNAME2
+          value: zk02
+        - name: HOSTNAME3
+          value: zk03
+      volumes:
+      - name: zkvolume
+        emptyDir: {}
