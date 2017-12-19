@@ -16,7 +16,6 @@ RUN mkdir -p $GOPATH/src/github.com/CodisLabs \
 	&& apt-get update \
 	&& apt-get install make gcc git autoconf -y
 
-##github上codis 3.2branch
 ADD codis3.2.tar.gz $GOPATH/src/github.com/CodisLabs/
 
 WORKDIR $CODIS_HOME

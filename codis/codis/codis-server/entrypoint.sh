@@ -71,7 +71,7 @@ auto-aof-rewrite-min-size 64mb
 aof-load-truncated yes
 EOF
 
-if $DATA_PERSISTENT = yes;then
+if [ $DATA_PERSISTENT = yes ];then
 	echo "save 900 1" >> ./config/7000.conf
 	echo "save 300 10" >> ./config/7000.conf
 	echo "save 60 10000" >> ./config/7000.conf
@@ -94,5 +94,27 @@ fi
 ./bin/codis-server ./config/7000.conf
 ./bin/codis-server ./config/7001.conf
 #./bin/redis-sentinel ./config/sentinel.conf
+#sleep 1
+#add redis-server to codis
+#./bin/codis-admin --dashboard=${CODIS_ADMIN_NAME}:18080 --group-add --gid=${GROUP_ID} --addr=${SERVER_NAME}:7000
+#./bin/codis-admin --dashboard=${CODIS_ADMIN_NAME}:18080 --group-add --gid=${GROUP_ID} --addr=${SERVER_NAME}:7001
+#sleep 1
+#sync master & slave
+#./bin/codis-admin --dashboard=${CODIS_ADMIN_NAME}:18080 --sync-action --create --addr=${SERVER_NAME}:7000
+#./bin/codis-admin --dashboard=${CODIS_ADMIN_NAME}:18080 --sync-action --create --addr=${SERVER_NAME}:7001
+
+#每个group的SLOT
+#SLOT_AVE=$(expr 1024 / ${NODE_NUM})
+#SLOT的起始值
+#SLOT_BEG=0
+#SLOT的结束值
+#SLOT_END=$(expr 1024 / ${NODE_NUM})
+#allot SLOTS
+#for G_ID in `seq ${NODE_NUM}`
+#do
+#    ./bin/codis-admin --dashboard=${CODIS_ADMIN_NAME}:18080 --slot-action --create-range --beg=${SLOT_BEG} --end=${SLOT_END} --gid=${G_ID}
+#    let SLOT_BEG=$SLOT_END+1
+#    let SLOT_END+=$SLOT_AVE
+#done
 
 tail -f /data/redis1/redis_7000.log /data/redis2/redis_7001.log

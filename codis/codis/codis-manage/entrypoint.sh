@@ -30,13 +30,21 @@ proto_type = "tcp4"
 proxy_addr = "${CODIS_PROXY_NAME}:19000"
 EOF
 
-./bin/codis-dashboard --ncpu=1 --config=./config/dashboard.toml --log=dashboard.log --log-level=WARN &
-./bin/codis-proxy --ncpu=1 --config=./config/proxy.toml --log=proxy.log --log-level=WARN &
+./bin/codis-dashboard --ncpu=1 --config=config/dashboard.toml --log=dashboard.log --log-level=WARN &
+./bin/codis-proxy --ncpu=1 --config=config/proxy.toml --log=proxy.log --log-level=WARN &
 ./bin/codis-fe --ncpu=1 --log=fe.log --log-level=WARN --zookeeper=${ZK_HOST1}:2181,${ZK_HOST2}:2181,${ZK_HOST3}:2181 --listen=${CODIS_ADMIN_NAME}:8080 &
+sleep 3
+#create proxy
+./bin/codis-admin --dashboard=${CODIS_ADMIN_NAME}:18080 --create-proxy -x ${CODIS_ADMIN_NAME}:11080
+#create group
+for G_ID in `seq ${NODE_NUM}`
+do
+	./bin/codis-admin --dashboard=${CODIS_ADMIN_NAME}:18080 --create-group --gid=${G_ID}
+	sleep 1
+done
 
 #pwd
 #ls
-sleep 10
+sleep 5
 #ls
 tail -f ./proxy.log.$(date "+%Y-%m-%d")
-#tail -f /etc/passwd
